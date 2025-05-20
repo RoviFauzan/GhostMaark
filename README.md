@@ -1,4 +1,4 @@
-# Watermarker
+# GhostMark
 
 GhostMark is a Python web application that allows users to add watermarks to images and videos.
 
