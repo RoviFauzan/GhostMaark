@@ -81,25 +81,3 @@ Watermarker uses a combined watermarking technique that incorporates:
 
 By combining these three approaches, Watermarker offers the most robust protection for your media. The watermark is invisible to the human eye but can be detected and extracted using the application.
 
-## Notes
-
-- Supported image formats: PNG, JPEG, BMP, GIF
-- Supported video formats: MP4, AVI, MOV, MKV, FLV
-
-_Social buttons_
-
-[![TrentPierce - watermarker](https://img.shields.io/static/v1?label=TrentPierce&message=watermarker&color=blue&logo=github)](https://github.com/TrentPierce/watermarker "Go to GitHub repo")
-[![stars - watermarker](https://img.shields.io/github/stars/TrentPierce/watermarker?style=social)](https://github.com/TrentPierce/watermarker)
-[![forks - watermarker](https://img.shields.io/github/forks/TrentPierce/watermarker?style=social)](https://github.com/TrentPierce/watermarker)
-
-
-_Repo metadata_
-
-[![GitHub tag](https://img.shields.io/github/tag/TrentPierce/watermarker?include_prereleases=&sort=semver&color=blue)](https://github.com/TrentPierce/watermarker/releases/)
-[![issues - watermarker](https://img.shields.io/github/issues/TrentPierce/watermarker)](https://github.com/TrentPierce/watermarker/issues)
-
-
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
