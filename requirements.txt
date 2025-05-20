@@ -1,0 +1,8 @@
+Flask==2.0.1
+Werkzeug==2.0.1
+numpy<2.0.0  # Use older NumPy to avoid compatibility issues
+opencv-python-headless==4.5.3.56
+Pillow==9.0.0
+
+# Optional dependencies
+# tensorflow>=2.5.0  # For deep learning watermarking

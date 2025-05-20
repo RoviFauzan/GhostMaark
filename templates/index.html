@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GhostMark</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="main-layout">
+            <!-- Navigation moved to left sidebar with logo at top -->
+            <nav class="side-nav">
+                <!-- Logo and brand now at top of sidebar -->
+                <div class="sidebar-header">
+                    <div class="logo-container">
+                        <i class="fas fa-ghost logo-icon"></i>
+                        <div class="logo-text">
+                            <h1>GhostMark</h1>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Navigation menu -->
+                <ul class="main-nav">
+                    <li class="active" data-tab="create"><i class="fas fa-magic"></i> Create Watermark</li>
+                    <li data-tab="extract"><i class="fas fa-search"></i> Extract Watermark</li>
+                    <li data-tab="detect"><i class="fas fa-eye"></i> Check Adversarial Training</li>
+                </ul>
+            </nav>
+
+            <main class="main-content">
+                <div class="container">
+                    <!-- Create Watermark Tab -->
+                    <div id="create-tab" class="tab-content active">
+                        <!-- Main app interface -->
+                        <div class="panel main-panel">
+                            <div class="panel-header">
+                                <h2><i class="fas fa-magic"></i> Create Watermark</h2>
+                            </div>
+                            <div class="panel-body">
+                                <form id="watermarkForm">
+                                    <!-- Upload section -->
+                                    <div class="section-title">
+                                        <i class="fas fa-upload"></i> Upload Media
+                                    </div>
+                                    <div class="input-group upload-group">
+                                        <div class="file-upload-container">
+                                            <input type="file" id="file" name="file" accept=".png,.jpg,.jpeg,.bmp,.gif,.mp4,.avi,.mov,.mkv,.flv">
+                                            <label for="file" class="file-upload-label">
+                                                <i class="fas fa-cloud-upload-alt"></i>
+                                                <span>Choose File</span>
+                                            </label>
+                                            <div class="file-info">
+                                                <span id="file-name">No file selected</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Add preview for uploaded media -->
+                                        <div class="media-preview-container">
+                                            <div class="preview-label">Media Preview:</div>
+                                            <div class="media-preview">
+                                                <div class="placeholder">Preview will appear here</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Watermark content section - only image watermarks now -->
+                                    <div class="section-title">
+                                        <i class="fas fa-stamp"></i> Watermark Image
+                                    </div>
+                                    
+                                    <!-- Image watermark options -->
+                                    <div id="image-watermark-options" class="option-section">
+                                        <div class="input-group">
+                                            <label for="watermark_image">
+                                                <i class="fas fa-image"></i> Watermark Image
+                                            </label>
+                                            <div class="file-upload-container watermark-upload">
+                                                <input type="file" id="watermark_image" name="watermark_image" accept=".png,.jpg,.jpeg,.bmp,.gif,.ico,.svg">
+                                                <label for="watermark_image" class="file-upload-label">
+                                                    <i class="fas fa-upload"></i>
+                                                    <span>Select Image</span>
+                                                </label>
+                                                <div class="file-info">
+                                                    <span id="watermark-image-name">No image selected</span>
+                                                </div>
+                                            </div>
+                                            <div class="watermark-preview">
+                                                <div class="placeholder">Preview will appear here</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="input-group">
+                                            <label for="watermark_size">
+                                                <i class="fas fa-expand-arrows-alt"></i> Watermark Size
+                                            </label>
+                                            <div class="slider-container">
+                                                <input type="range" id="watermark_size" name="watermark_size" min="5" max="50" value="20">
+                                                <span id="size-value">20%</span>
+                                            </div>
+                                            
+                                            <!-- Add size options as radio buttons -->
+                                            <div class="radio-options">
+                                                <div class="radio-option">
+                                                    <input type="radio" id="size-small" name="size_preset" value="10">
+                                                    <label for="size-small">Small (10%)</label>
+                                                </div>
+                                                <div class="radio-option">
+                                                    <input type="radio" id="size-medium" name="size_preset" value="20" checked>
+                                                    <label for="size-medium">Medium (20%)</label>
+                                                </div>
+                                                <div class="radio-option">
+                                                    <input type="radio" id="size-large" name="size_preset" value="35">
+                                                    <label for="size-large">Large (35%)</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Add opacity control -->
+                                        <div class="input-group">
+                                            <label for="watermark_opacity">
+                                                <i class="fas fa-low-vision"></i> Watermark Opacity
+                                            </label>
+                                            <div class="slider-container">
+                                                <input type="range" id="watermark_opacity" name="watermark_opacity" min="10" max="100" value="80">
+                                                <span id="opacity-value">80%</span>
+                                            </div>
+                                            
+                                            <!-- Add opacity options as radio buttons -->
+                                            <div class="radio-options">
+                                                <div class="radio-option">
+                                                    <input type="radio" id="opacity-light" name="opacity_preset" value="40">
+                                                    <label for="opacity-light">Light (40%)</label>
+                                                </div>
+                                                <div class="radio-option">
+                                                    <input type="radio" id="opacity-medium" name="opacity_preset" value="80" checked>
+                                                    <label for="opacity-medium">Medium (80%)</label>
+                                                </div>
+                                                <div class="radio-option">
+                                                    <input type="radio" id="opacity-solid" name="opacity_preset" value="100">
+                                                    <label for="opacity-solid">Solid (100%)</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Settings section -->
+                                    <div class="section-title">
+                                        <i class="fas fa-cog"></i> Watermark Settings
+                                    </div>
+                                    
+                                    <div class="flex-row settings-row">
+                                        <div class="input-group half-width">
+                                            <label for="position">
+                                                <i class="fas fa-arrows-alt"></i> Position
+                                            </label>
+                                            <select id="position" name="position">
+                                                <option value="bottom-right">Bottom Right</option>
+                                                <option value="bottom-left">Bottom Left</option>
+                                                <option value="top-right">Top Right</option>
+                                                <option value="top-left">Top Left</option>
+                                                <option value="center">Center</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="input-group half-width">
+                                            <label>
+                                                <i class="fas fa-eye-slash"></i> Visibility
+                                            </label>
+                                            <div class="toggle-switch-container">
+                                                <span class="toggle-label">Visible</span>
+                                                <label class="switch">
+                                                    <input type="checkbox" id="steganography_toggle" name="watermark_type" value="steganographic">
+                                                    <span class="slider round"></span>
+                                                </label>
+                                                <span class="toggle-label">Hidden</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Modify the technique selector dropdown -->
+                                        <div class="input-group half-width">
+                                            <label>
+                                                <i class="fas fa-microchip"></i> Technique
+                                            </label>
+                                            <select id="watermark_technique" name="watermark_technique">
+                                                <option value="combined">Combined (LSB + DCT + Deep Learning)</option>
+                                            </select>
+                                            <div class="technique-info">
+                                                <i class="fas fa-info-circle"></i>
+                                                <div class="technique-tooltip" id="technique-tooltip">
+                                                    Combined: Uses multiple techniques (LSB + DCT + Deep Learning) for maximum robustness against various attacks and transformations.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Submit button -->
+                                    <div class="button-container">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-magic"></i> Add Watermark
+                                        </button>
+                                    </div>
+                                </form>
+                                
+                                <!-- Progress indicator for watermarking -->
+                                <div id="create-progress" class="progress-section hidden">
+                                    <div class="section-title">
+                                        <i class="fas fa-spinner fa-spin"></i> Processing
+                                    </div>
+                                    <p>Adding watermark to your file. This may take a few moments...</p>
+                                    <div class="progress-bar-container">
+                                        <div class="progress-bar">
+                                            <div class="progress" id="create-progress-bar"></div>
+                                        </div>
+                                        <span id="create-progress-text">0%</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Result section for watermarking -->
+                                <div id="create-result" class="result-section hidden">
+                                    <div class="section-title">
+                                        <i class="fas fa-check-circle"></i> Success
+                                    </div>
+                                    <p>Your file has been watermarked successfully and is ready for download.</p>
+                                    
+                                    <!-- Add result preview section -->
+                                    <div class="result-preview-container">
+                                        <div class="preview-label">Result Preview:</div>
+                                        <div class="result-preview" id="create-result-preview">
+                                            <div class="placeholder">Loading preview...</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="button-container">
+                                        <a id="download-link" class="btn btn-success" href="#">
+                                            <i class="fas fa-download"></i> Download File
+                                        </a>
+                                        <button id="new-watermark" class="btn btn-light">
+                                            <i class="fas fa-plus"></i> Process Another File
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Error message for watermarking -->
+                                <div id="create-error" class="error-message hidden">
+                                    <div class="section-title">
+                                        <i class="fas fa-exclamation-triangle"></i> Error
+                                    </div>
+                                    <p id="create-error-text">An error occurred while processing your request.</p>
+                                    <div class="button-container">
+                                        <button id="create-try-again" class="btn btn-secondary">
+                                            <i class="fas fa-redo"></i> Try Again
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Extract Watermark Tab -->
+                    <div id="extract-tab" class="tab-content">
+                        <!-- Extract watermark panel -->
+                        <div class="panel extract-panel">
+                            <div class="panel-header">
+                                <h2><i class="fas fa-search"></i> Extract Watermark</h2>
+                            </div>
+                            <div class="panel-body">
+                                <p class="info-text">
+                                    <i class="fas fa-info-circle"></i> 
+                                    Upload a file with a hidden watermark to extract the content.
+                                </p>
+                                <form id="extractForm">
+                                    <div class="input-group">
+                                        <div class="file-upload-container">
+                                            <input type="file" id="extract-file" name="file" accept=".png,.jpg,.jpeg,.bmp,.gif,.mp4,.avi,.mov,.mkv,.flv">
+                                            <label for="extract-file" class="file-upload-label">
+                                                <i class="fas fa-cloud-upload-alt"></i>
+                                                <span>Choose File</span>
+                                            </label>
+                                            <div class="file-info">
+                                                <span id="extract-file-name">No file selected</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Add preview for uploaded extraction media -->
+                                        <div class="media-preview-container">
+                                            <div class="preview-label">File Preview:</div>
+                                            <div class="extract-media-preview" id="extract-media-preview">
+                                                <div class="placeholder">Preview will appear here</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="button-container">
+                                        <button type="submit" class="btn btn-secondary">
+                                            <i class="fas fa-search"></i> Extract Watermark
+                                        </button>
+                                    </div>
+                                </form>
+                                
+                                <!-- Progress indicator for extraction -->
+                                <div id="extract-progress" class="progress-section hidden">
+                                    <div class="section-title">
+                                        <i class="fas fa-spinner fa-spin"></i> Processing
+                                    </div>
+                                    <p>Extracting watermark from your file...</p>
+                                    <div class="progress-bar-container">
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 100%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Result section for extraction - SIMPLIFIED VERSION -->
+                                <div id="extract-result" class="result-box hidden">
+                                    <h3><i class="fas fa-check-circle"></i> Watermark Extraction Results</h3>
+                                    
+                                    <!-- Container for the extracted watermark only -->
+                                    <div id="watermark-extraction-result" class="single-result-container">
+                                        <div class="preview-label">Extracted Watermark</div>
+                                        <div id="extracted-watermark-content" class="extraction-content">
+                                            <!-- Content will be dynamically inserted here -->
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="button-container mt-3">
+                                        <button id="extract-new" class="btn btn-light">
+                                            <i class="fas fa-plus"></i> Extract Another File
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Error message for extraction -->
+                                <div id="extract-error" class="error-message hidden">
+                                    <div class="section-title">
+                                        <i class="fas fa-exclamation-triangle"></i> Error
+                                    </div>
+                                    <p id="extract-error-text">An error occurred while extracting the watermark.</p>
+                                    <div class="button-container">
+                                        <button id="extract-try-again" class="btn btn-secondary">
+                                            <i class="fas fa-redo"></i> Try Again
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Detect Watermark Tab -->
+                    <div id="detect-tab" class="tab-content">
+                        <!-- Detect watermark panel -->
+                        <div class="panel extract-panel">
+                            <div class="panel-header">
+                                <h2><i class="fas fa-eye"></i> Apply Attack Effects</h2>
+                            </div>
+                            <div class="panel-body">
+                                <p class="info-text">
+                                    <i class="fas fa-info-circle"></i> 
+                                    Upload an image to apply various attack effects that simulate common image modifications.
+                                </p>
+                                <form id="detectForm" action="/attack">
+                                    <div class="input-group">
+                                        <div class="file-upload-container">
+                                            <input type="file" id="detect-file" name="file" accept=".png,.jpg,.jpeg,.bmp,.gif">
+                                            <label for="detect-file" class="file-upload-label">
+                                                <i class="fas fa-cloud-upload-alt"></i>
+                                                <span>Choose File</span>
+                                            </label>
+                                            <div class="file-info">
+                                                <span id="detect-file-name">No file selected</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Add preview for uploaded detection media -->
+                                        <div class="media-preview-container">
+                                            <div class="preview-label">File Preview:</div>
+                                            <div class="extract-media-preview" id="detect-media-preview">
+                                                <div class="placeholder">Preview will appear here</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Attack Selection Section -->
+                                    <div class="section-title">
+                                        <i class="fas fa-shield-alt"></i> Watermark Attack Simulation
+                                    </div>
+                                    
+                                    <div class="attack-options">
+                                        <div class="input-group">
+                                            <label>
+                                                <i class="fas fa-bomb"></i> Attack Type
+                                            </label>
+                                            <select id="attack_type" name="attack_type">
+                                                <option value="crop">Cropping Attack</option>
+                                                <option value="noise">Noise Attack</option>
+                                                <option value="blur">Blur Attack</option>
+                                                <option value="compression" selected>Compression Attack</option>
+                                                <option value="rotation">Rotation Attack</option>
+                                                <option value="brightness">Brightness Attack</option>
+                                                <option value="contrast">Contrast Attack</option>
+                                                <option value="equalization">Histogram Equalization</option>
+                                                <option value="median">Median Filter</option>
+                                                <option value="resize">Resize Attack</option>
+                                                <option value="combined_low">Combined (Low Intensity)</option>
+                                                <option value="combined_medium">Combined (Medium Intensity)</option>
+                                                <option value="combined_high">Combined (High Intensity)</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <!-- Dynamic attack parameters -->
+                                        <div id="attack-crop-params" class="attack-params hidden">
+                                            <div class="input-group">
+                                                <label for="crop_percentage">Crop Percentage:</label>
+                                                <div class="slider-container">
+                                                    <input type="range" id="crop_percentage" name="crop_percentage" min="5" max="40" value="20">
+                                                    <span id="crop-value">20%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div id="attack-noise-params" class="attack-params hidden">
+                                            <div class="input-group">
+                                                <label for="noise_level">Noise Level:</label>
+                                                <div class="slider-container">
+                                                    <input type="range" id="noise_level" name="noise_level" min="1" max="20" value="5">
+                                                    <span id="noise-value">5</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div id="attack-blur-params" class="attack-params hidden">
+                                            <div class="input-group">
+                                                <label for="blur_level">Blur Level:</label>
+                                                <div class="slider-container">
+                                                    <input type="range" id="blur_level" name="blur_level" min="3" max="15" step="2" value="5">
+                                                    <span id="blur-value">5x5</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div id="attack-rotation-params" class="attack-params hidden">
+                                            <div class="input-group">
+                                                <label for="angle">Rotation Angle:</label>
+                                                <div class="slider-container">
+                                                    <input type="range" id="angle" name="angle" min="5" max="180" value="45">
+                                                    <span id="angle-value">45°</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div id="attack-brightness-params" class="attack-params hidden">
+                                            <div class="input-group">
+                                                <label for="brightness_factor">Brightness Factor:</label>
+                                                <div class="slider-container">
+                                                    <input type="range" id="brightness_factor" name="factor" min="0.5" max="2.5" step="0.1" value="1.5">
+                                                    <span id="brightness-value">1.5x</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div id="attack-contrast-params" class="attack-params hidden">
+                                            <div class="input-group">
+                                                <label for="contrast_factor">Contrast Factor:</label>
+                                                <div class="slider-container">
+                                                    <input type="range" id="contrast_factor" name="factor" min="0.5" max="2.5" step="0.1" value="1.5">
+                                                    <span id="contrast-value">1.5x</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div id="attack-median-params" class="attack-params hidden">
+                                            <div class="input-group">
+                                                <label for="kernel_size">Kernel Size:</label>
+                                                <div class="slider-container">
+                                                    <input type="range" id="kernel_size" name="kernel_size" min="3" max="13" step="2" value="5">
+                                                    <span id="kernel-value">5x5</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div id="attack-resize-params" class="attack-params hidden">
+                                            <div class="input-group">
+                                                <label for="scale">Scale Factor:</label>
+                                                <div class="slider-container">
+                                                    <input type="range" id="scale" name="scale" min="0.1" max="0.9" step="0.1" value="0.5">
+                                                    <span id="scale-value">50%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="button-container">
+                                        <button type="submit" class="btn btn-secondary">
+                                            <i class="fas fa-shield-alt"></i> Test Watermark Resistance
+                                        </button>
+                                    </div>
+                                </form>
+                                
+                                <!-- Progress indicator for detection -->
+                                <div id="detect-progress" class="progress-section hidden">
+                                    <div class="section-title">
+                                        <i class="fas fa-spinner fa-spin"></i> Processing
+                                    </div>
+                                    <p>Testing watermark resistance against attacks...</p>
+                                    <div class="progress-bar-container">
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: 100%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Result section for detection - IMPROVED LAYOUT -->
+                                <div id="detect-result" class="result-box hidden">
+                                    <h3><i class="fas fa-check-circle"></i> Image Attack Results</h3>
+                                    
+                                    <div class="detection-results">
+                                        <div class="original-image-container">
+                                            <div class="preview-label">
+                                                Original Image
+                                                <i class="fas fa-info-circle hint-icon" title="The image before the attack"></i>
+                                            </div>
+                                            <div class="original-image-preview" id="detect-original-preview">
+                                                <div class="placeholder">Loading preview...</div>
+                                            </div>
+                                            <div class="image-caption">The original image</div>
+                                        </div>
+                                        
+                                        <div class="attacked-image-container">
+                                            <div class="preview-label">
+                                                After Attack
+                                                <i class="fas fa-info-circle hint-icon" title="The image after the attack"></i>
+                                            </div>
+                                            <div class="attacked-image-preview" id="detect-attacked-preview">
+                                                <div class="placeholder">Loading preview...</div>
+                                            </div>
+                                            <div class="image-caption" id="attack-description">Image after attack</div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="button-container mt-3">
+                                        <a id="download-detect-attacked-link" class="btn btn-success" href="#" download>
+                                            <i class="fas fa-download"></i> Download Attacked Image
+                                        </a>
+                                        <button id="extract-from-attacked" class="btn btn-primary">
+                                            <i class="fas fa-search"></i> Extract Watermark from Attacked
+                                        </button>
+                                        <button id="detect-new" class="btn btn-light">
+                                            <i class="fas fa-plus"></i> Try Another Attack
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- Add section to show extraction results from attacked image -->
+                                    <div id="attack-extraction-result" class="hidden mt-3">
+                                        <h4><i class="fas fa-search"></i> Extraction from Attacked Image</h4>
+                                        <div class="extraction-content">
+                                            <!-- Content will be dynamically inserted here -->
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Error message for detection -->
+                                <div id="detect-error" class="error-message hidden">
+                                    <div class="section-title">
+                                        <i class="fas fa-exclamation-triangle"></i> Error
+                                    </div>
+                                    <p id="detect-error-text">An error occurred while testing the watermark.</p>
+                                    <div class="button-container">
+                                        <button id="detect-try-again" class="btn btn-secondary">
+                                            <i class="fas fa-redo"></i> Try Again
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <footer class="main-footer">
+            <div class="container">
+                <p>© 2025 GhostMark | Kelompok 3</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
